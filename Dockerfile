@@ -1,6 +1,7 @@
 FROM alpine/git:latest AS clone 
 #Descarga del repo alpine la carpeta git en su release latest (todo lo necesario para ejecutar el comando git) y la llamas clone (es RO)
 
+ARG dir=clone-folder
 ARG hostname=github.com
 ARG username=ipuertas 
 #asigna ipuertas a la vble username
@@ -13,14 +14,22 @@ RUN git clone https://$hostname/$username/$project
 #ejecuta el comando git clone....
 
 FROM maven:alpine AS build
-WORKDIR /app2
-COPY --from=clone /app1/spring-petclinic . 
-RUN mvn install && mv target/spring-petclinic-*.jar target/spring-petclinic.jar
+
+# !! cada from tiene su espacio de variables
+ARG dir=build-folder 
+ARG from=clone
+ARG dir_old=clone-folder 
+ARG project=spring-petclinic
+
+WORKDIR /$dir
+COPY --from=$from /$dir_old/$project . 
+RUN mvn install && mv target/$project-*.jar target/$project.jar
 
 FROM openjdk:jre-alpine AS production
-WORKDIR /app3
-COPY --from=build /app2/target/spring-petclinic.jar .
+# descargo los binarios del jre a una carpeta llamada production
+WORKDIR /production-folder
+COPY --from=build_folder/target /production/target/spring-petclinic.jar .
 ENTRYPOINT ["java","-jar"]
 CMD ["spring-petclinic.jar"]
-
+#marca que el entry point del contenedor es "java -jar spring-petclinic.jar"
 # COMMENT
