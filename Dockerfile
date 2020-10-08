@@ -5,7 +5,7 @@ ARG dir=clone-folder
 ARG hostname=github.com
 ARG username=ipuertas 
 #asigna ipuertas a la vble username
-ARG project=spring-petclinic 
+ARG project=spring-petclinic
 #asigna ipuertas a la vble username
 
 WORKDIR /clone-folder 
