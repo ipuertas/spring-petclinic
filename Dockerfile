@@ -29,7 +29,7 @@ RUN mvn install && mv target/$project-*.jar target/$project.jar
 FROM openjdk:jre-alpine AS production
 # descargo los binarios del jre a una carpeta llamada production
 WORKDIR /production-folder
-COPY --from=build_folder/target /production/target/spring-petclinic.jar .
+COPY --from=build_folder /production/target/spring-petclinic.jar .
 ENTRYPOINT ["java","-jar"]
 CMD ["spring-petclinic.jar"]
 #marca que el entry point del contenedor es "java -jar spring-petclinic.jar"
