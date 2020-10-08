@@ -12,22 +12,15 @@ jobs:
       uses: actions/checkout@v2
     -
       run: |
-
         set -x
-
         project=$(basename $GITHUB_REPOSITORY)
-
         compose=etc/docker/$mode/$project.yaml
-
         date=$(date +%s)
-
         sed -i s/latest/$mode-$date/ $compose
         docker build -t $GITHUB_REPOSITORY:$mode-$date --no-cache .
-
         docker swarm init
         sed -i s/worker/manager/ $compose
         docker stack deploy -c $compose $project
-
         while true
           do
             sleep 1
