@@ -3,7 +3,7 @@ FROM alpine/git:latest AS clone
 ARG dir=clone-folder
 ARG hostname=github.com
 ARG project=spring-petclinic
-ARG username=secobau
+ARG username=ipuertas
 
 WORKDIR /$dir
 RUN git clone https://$hostname/$username/$project
